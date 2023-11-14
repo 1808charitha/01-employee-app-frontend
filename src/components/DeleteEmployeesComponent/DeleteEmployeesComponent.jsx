@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './DeleteEmployeesComponent.css';
+import axios from 'axios';
 
 const DeleteEmployeesComponent = () => {
   const [employeeID, setEmployeeID] = useState('')
@@ -9,39 +10,37 @@ const DeleteEmployeesComponent = () => {
     dateOfBirth: '',
   });
 
-  const employeeNameHandler = (event) => {
-    setEmployeeInfo({
-      ...employeeInfo,
-      employeeName: event.target.value
-    });
-  };
-
-  const employeeEmailHandler = (event) => {
-    setEmployeeInfo({
-      ...employeeInfo,
-      employeeEmail: event.target.value
-    });
-  };
-
   const employeeIDHandler = (event) => {
     setEmployeeID(event.target.value)
   };
 
-  const dateOfBirthHandler = (event) => {
-    setEmployeeInfo({
-      ...employeeInfo,
-      dateOfBirth: event.target.value
-    });
-  };
 
-  const employeeIDValidator = () => {
-    //Validate data from backend
+
+  const employeeIDValidator = (event) => {
+    event.preventDefault()
+    axios
+      .get(`http://localhost:8082/api/v1/employee/${employeeID}`)
+      .then(response => setEmployeeInfo(response.data))
+      .catch(error => {
+        alert(`Status ${error.response.data.status} - ${error.response.data.message}`)
+      })
   };
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
 
-    //send data to backend
+    axios
+      .delete(`http://localhost:8082/api/v1/employee/${employeeID}`)
+      .then(response => {
+        if (response.status == 200)
+        {
+          alert(`Data of ${employeeInfo.employeeName} is deleted successfully`)
+          window.location.href="/"
+        }
+      })
+      .catch(error => {
+        alert(`Status ${error.response.data.status} - ${error.response.data.message}`)
+      })
   };
 
   const { employeeName, employeeEmail, dateOfBirth } = employeeInfo;
@@ -70,8 +69,7 @@ const DeleteEmployeesComponent = () => {
           type="text"
           placeholder="Enter the employee name"
           value={employeeName}
-          onChange={employeeNameHandler}
-          required
+          readOnly
         />
       </div>
 
@@ -82,8 +80,7 @@ const DeleteEmployeesComponent = () => {
           className="form-control"
           placeholder="Enter the employee email"
           value={employeeEmail}
-          onChange={employeeEmailHandler}
-          required
+          readOnly
         />
       </div>
 
@@ -92,8 +89,7 @@ const DeleteEmployeesComponent = () => {
         <input
           type="date"
           value={dateOfBirth}
-          onChange={dateOfBirthHandler}
-          required
+          readOnly
         />
       </div>
 

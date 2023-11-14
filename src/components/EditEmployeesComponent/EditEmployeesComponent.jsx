@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './EditEmployeesComponent.css';
+import axios from 'axios';
 
 const EditEmployeesComponent = () => {
   const [employeeID, setEmployeeID] = useState('')
@@ -34,14 +35,32 @@ const EditEmployeesComponent = () => {
     });
   };
 
-  const employeeIDValidator = () => {
-    //Validate data from backend
+  const employeeIDValidator = (event) => {
+    event.preventDefault()
+    axios
+      .get(`http://localhost:8082/api/v1/employee/${employeeID}`)
+      .then(response => setEmployeeInfo(response.data))
+      .catch(error => {
+        alert(`Status ${error.response.data.status} - ${error.response.data.message}`)
+      })
+    
   };
 
   const formSubmitHandler = (event) => {
     event.preventDefault();
 
-    //send data to backend
+    axios
+      .put(`http://localhost:8082/api/v1/employee/${employeeID}`, employeeInfo)
+      .then(response => {
+        if (response.status == 200)
+        {
+          alert(`Data of ${employeeInfo.employeeName} is updated successfully`)
+          window.location.href="/"
+        }
+      })
+      .catch(error => {
+        alert(`Status ${error.response.data.status} - ${error.response.data.message}`)
+      })
   };
 
   const { employeeName, employeeEmail, dateOfBirth } = employeeInfo;

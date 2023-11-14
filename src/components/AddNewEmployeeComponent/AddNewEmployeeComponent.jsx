@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './AddNewEmployeeComponent.css';
+import axios from 'axios';
 
 const AddNewEmployeeComponent = () => {
   const [employeeInfo, setEmployeeInfo] = useState({
@@ -33,7 +34,18 @@ const AddNewEmployeeComponent = () => {
   const formSubmitHandler = (event) => {
     event.preventDefault();
 
-    //Send data to backend
+    axios
+      .post(`http://localhost:8082/api/v1/employee/`,employeeInfo)
+      .then(response => {
+        if (response.status == 200)
+        {
+          alert(`Data of ${employeeInfo.employeeName} is added successfully`)
+          window.location.href='/'
+        }
+      })
+      .catch(error => {
+        alert(`Status ${error.response.data.status} - ${error.response.data.message}`)
+      })
   };
 
   const { employeeName, employeeEmail, dateOfBirth } = employeeInfo;
