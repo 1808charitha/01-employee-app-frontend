@@ -1,45 +1,45 @@
 import React, { useState } from 'react';
-import './EditEmployeesComponent.css';
+import './EditStudentComponent.css';
 import axios from 'axios';
 
-const EditEmployeesComponent = () => {
-  const [employeeID, setEmployeeID] = useState('')
-  const [employeeInfo, setEmployeeInfo] = useState({
-    employeeName: '',
-    employeeEmail: '',
+const EditStudentComponent = () => {
+  const [studentID, setStudentID] = useState('')
+  const [studentInfo, setStudentInfo] = useState({
+    studentName: '',
+    studentEmail: '',
     dateOfBirth: '',
   });
 
-  const employeeNameHandler = (event) => {
-    setEmployeeInfo({
-      ...employeeInfo,
-      employeeName: event.target.value
+  const studentNameHandler = (event) => {
+    setStudentInfo({
+      ...studentInfo,
+      studentName: event.target.value
     });
   };
 
-  const employeeEmailHandler = (event) => {
-    setEmployeeInfo({
-      ...employeeInfo,
-      employeeEmail: event.target.value
+  const studentEmailHandler = (event) => {
+    setStudentInfo({
+      ...studentInfo,
+      studentEmail: event.target.value
     });
   };
 
-  const employeeIDHandler = (event) => {
-    setEmployeeID(event.target.value)
+  const studentIDHandler = (event) => {
+    setStudentID(event.target.value)
   };
 
   const dateOfBirthHandler = (event) => {
-    setEmployeeInfo({
-      ...employeeInfo,
+    setStudentInfo({
+      ...studentInfo,
       dateOfBirth: event.target.value
     });
   };
 
-  const employeeIDValidator = (event) => {
+  const studentIDValidator = (event) => {
     event.preventDefault()
     axios
-      .get(`http://localhost:8082/api/v1/employee/${employeeID}`)
-      .then(response => setEmployeeInfo(response.data))
+      .get(`http://localhost:8082/api/v1/employee/${studentID}`)
+      .then(response => setStudentInfo(response.data))
       .catch(error => {
         alert(`Status ${error.response.data.status} - ${error.response.data.message}`)
       })
@@ -50,11 +50,11 @@ const EditEmployeesComponent = () => {
     event.preventDefault();
 
     axios
-      .put(`http://localhost:8082/api/v1/employee/${employeeID}`, employeeInfo)
+      .put(`http://localhost:8082/api/v1/employee/${studentID}`, studentInfo)
       .then(response => {
         if (response.status == 200)
         {
-          alert(`Data of ${employeeInfo.employeeName} is updated successfully`)
+          alert(`Data of ${studentInfo.studentName} is updated successfully`)
           window.location.href="/"
         }
       })
@@ -63,45 +63,45 @@ const EditEmployeesComponent = () => {
       })
   };
 
-  const { employeeName, employeeEmail, dateOfBirth } = employeeInfo;
+  const { studentName, studentEmail, dateOfBirth } = studentInfo;
 
   return (
     <form className="form-container" onSubmit={formSubmitHandler}>
-      <h2>Updating Employee</h2>
+      <h2>Updating Student</h2>
 
       <div className="form-group">
-        <label>Employee ID</label>
+        <label>Student ID</label>
         <input
           type="text"
-          placeholder="Give the Employee ID"
-          value={employeeID}
-          onChange={employeeIDHandler}
+          placeholder="Give the Student ID"
+          value={studentID}
+          onChange={studentIDHandler}
           required
         />
       </div>
       <div>
-        <button onClick={employeeIDValidator}>Check</button>
+        <button onClick={studentIDValidator}>Check</button>
       </div>
 
       <div className="form-group">
-        <label>Employee Name</label>
+        <label>Student Name</label>
         <input
           type="text"
           placeholder="Enter the employee name"
-          value={employeeName}
-          onChange={employeeNameHandler}
+          value={studentName}
+          onChange={studentNameHandler}
           required
         />
       </div>
 
       <div className="form-group">
-        <label>Employee Email</label>
+        <label>Student Email</label>
         <input
           type="text"
           className="form-control"
-          placeholder="Enter the employee email"
-          value={employeeEmail}
-          onChange={employeeEmailHandler}
+          placeholder="Enter the student email"
+          value={studentEmail}
+          onChange={studentEmailHandler}
           required
         />
       </div>
@@ -123,4 +123,4 @@ const EditEmployeesComponent = () => {
   );
 };
 
-export default EditEmployeesComponent;
+export default EditStudentComponent;

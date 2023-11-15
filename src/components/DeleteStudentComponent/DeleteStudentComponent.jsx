@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
-import './DeleteEmployeesComponent.css';
+import './DeleteStudentComponent';
 import axios from 'axios';
 
-const DeleteEmployeesComponent = () => {
-  const [employeeID, setEmployeeID] = useState('')
-  const [employeeInfo, setEmployeeInfo] = useState({
-    employeeName: '',
-    employeeEmail: '',
+const DeleteStudentComponent = () => {
+  const [studentID, setStudentID] = useState('')
+  const [studentInfo, setStudentInfo] = useState({
+    studentName: '',
+    studentEmail: '',
     dateOfBirth: '',
   });
 
-  const employeeIDHandler = (event) => {
-    setEmployeeID(event.target.value)
+  const studentIDHandler = (event) => {
+    setStudentID(event.target.value)
   };
 
 
 
-  const employeeIDValidator = (event) => {
+  const studentIDValidator = (event) => {
     event.preventDefault()
     axios
-      .get(`http://localhost:8082/api/v1/employee/${employeeID}`)
-      .then(response => setEmployeeInfo(response.data))
+      .get(`http://localhost:8082/api/v1/student/${studentID}`)
+      .then(response => setstudentInfo(response.data))
       .catch(error => {
         alert(`Status ${error.response.data.status} - ${error.response.data.message}`)
       })
@@ -30,11 +30,11 @@ const DeleteEmployeesComponent = () => {
     event.preventDefault();
 
     axios
-      .delete(`http://localhost:8082/api/v1/employee/${employeeID}`)
+      .delete(`http://localhost:8082/api/v1/employee/${studentID}`)
       .then(response => {
         if (response.status == 200)
         {
-          alert(`Data of ${employeeInfo.employeeName} is deleted successfully`)
+          alert(`Data of ${studentInfo.studentName} is deleted successfully`)
           window.location.href="/"
         }
       })
@@ -43,43 +43,43 @@ const DeleteEmployeesComponent = () => {
       })
   };
 
-  const { employeeName, employeeEmail, dateOfBirth } = employeeInfo;
+  const { studentName, studentEmail, dateOfBirth } = studentInfo;
 
   return (
     <form className="form-container" onSubmit={formSubmitHandler}>
-      <h2>Deleting Employee</h2>
+      <h2>Deleting Student</h2>
 
       <div className="form-group">
-        <label>Employee ID</label>
+        <label>Student ID</label>
         <input
           type="text"
-          placeholder="Give the Employee ID"
-          value={employeeID}
-          onChange={employeeIDHandler}
+          placeholder="Give the Student ID"
+          value={studentID}
+          onChange={studentIDHandler}
           required
         />
       </div>
       <div>
-        <button onClick={employeeIDValidator}>Check</button>
+        <button onClick={studentIDValidator}>Check</button>
       </div>
 
       <div className="form-group">
-        <label>Employee Name</label>
+        <label>Student Name</label>
         <input
           type="text"
           placeholder="Enter the employee name"
-          value={employeeName}
+          value={studentName}
           readOnly
         />
       </div>
 
       <div className="form-group">
-        <label>Employee Email</label>
+        <label>Student Email</label>
         <input
           type="text"
           className="form-control"
           placeholder="Enter the employee email"
-          value={employeeEmail}
+          value={studentEmail}
           readOnly
         />
       </div>
@@ -100,4 +100,4 @@ const DeleteEmployeesComponent = () => {
   );
 };
 
-export default DeleteEmployeesComponent;
+export default DeleteStudentComponent;
